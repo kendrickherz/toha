@@ -42,6 +42,9 @@
                                 <div class="timeframe col-lg-2 col-md-4">{{ .timeframe }}</div>
                             </div>
                             <h6>{{ .name }}</h6>
+                            {{ if .mention }}
+                                <h6><span class="text-muted">Mention: </span><span>{{ .mention }}</span></h6>
+                            {{ end }}
                             {{ if .grade }}
                                 <h6><span class="text-muted">{{ .grade.scale }}: </span><span>{{ .grade.achieved }}</span> {{ i18n "out_of"}} <span>{{ .grade.outOf }}</span></h6>
                             {{ end }}
@@ -59,6 +62,14 @@
                                     </ul>
                                 </div>
                             {{ end }}
+
+                            {{ if .about }}
+                            <div class="taken-courses">
+                                <h6 class="text-muted">{{ i18n "about"}}</h6>
+                                <p style="margin-left: 1rem; text-align: justify; margin-right: 1rem;"><em> {{ .about }} </em></p>
+                            </div>
+                            {{ end }}
+
                             {{ if .takenCourses }}
                             {{ $collapseAfter  := .takenCourses.collapseAfter | default 2 }}
                             <div class="taken-courses">
@@ -68,15 +79,15 @@
                                 <table>
                                     <thead>
                                         <th class="course-name-header">{{ i18n "course_name"}}</th>
-                                        {{ if not $hideScale  }}<th>{{ i18n "total_credit"}}</th>{{ end }}
-                                        <th>{{ i18n "obtained_credit"}}</th>
+                                        {{ if not $hideScale  }}<th>{{ i18n "ETCS"}}</th>{{ end }}
+                                        <!-- <th>{{ i18n "obtained_credit"}}</th> -->
                                     </thead>
                                     <tbody>
                                         {{ range $index,$course := .takenCourses.courses }}
                                         <tr class="course {{ if ge $index $collapseAfter }}hidden-course{{ end}}">
                                             <td>{{ $course.name }}</td>
                                             {{ if not $hideScale  }}<td>{{ $course.outOf }}</td>{{ end }}
-                                            <td>{{ $course.achieved }}</td>
+                                            <!-- <td>{{ $course.achieved }}</td> -->
                                         </tr>
                                         {{ end }}
                                     </tbody>

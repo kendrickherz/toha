@@ -1,5 +1,7 @@
 <div class="col-xs-12 col-sm-6 col-lg-4 pt-2">
-  <a class="skill-card-link" {{ if .url }}href="{{ .url }}" title="{{ .name }}" target="_blank" rel="noopener"{{ end }}>
+  {{ if .url }}
+    <a class="skill-card-link" {{ if .url }}href="{{ .url }}" title="{{ .name }}" target="_blank" rel="noopener"{{ end }}>
+  {{ end }}
     <div class="card">
       <div class="card-head d-flex">
         {{ if .logo }}
@@ -8,7 +10,7 @@
           {{ if ne $logoImage.MediaType.SubType "svg" }}
             {{ $logoImage = $logoImage.Fit "24x24" }}
           {{ end }}
-        
+
           <img class="card-img-xs" src="{{ $logoImage.RelPermalink }}" alt="{{ .name }}" />
           <h5 class="card-title">{{ .name }}</h5>
         {{ else if .icon }}
@@ -18,9 +20,38 @@
           <h5 class="card-title">{{ .name }}</h5>
         {{ end }}
       </div>
-      <div class="card-body">
-        <p class="card-text">{{ .summary | markdownify }}</p>
+      <div class="card-body" style="padding-bottom: 0;">
+        {{ if .summary }}
+          <p class="card-text">{{ .summary | markdownify }}</p>
+        {{ end }}
+        {{ range .list }}
+          {{ if .icon }}
+            {{ $IconImage := resources.Get .icon }}
+            {{ if ne $IconImage.MediaType.SubType "svg" }}
+              {{ $IconImage = $IconImage.Fit "24x24" }}
+            {{ end }}
+            {{ if .url }}
+              <a href="{{ .url }}">
+                <img class="card-img-xs" src="{{ $IconImage.RelPermalink }}" alt="{{ .label }}" />{{ .label }}
+              </a><br>
+            {{ else }}
+              <P class="card-text" style="margin-bottom: 4px;">
+                <img class="card-img-xs" src="{{ $IconImage.RelPermalink }}" alt="{{ .label }}" />{{ .label }}
+              </P>
+            {{ end }}
+          {{ else }}
+            {{ if .url }}
+              <a href="{{ .url }}" style="margin-bottom: 4px; margin-left: 32px;">
+                {{ .label }}
+              </a>
+            {{ else }}
+                <P class="card-text" style="margin-bottom: 4px; margin-left: 32px;">{{ .label }}</P>
+            {{ end }}
+          {{ end }}
+        {{ end }}
       </div>
     </div>
-  </a>
+  {{ if .url }}
+    </a>
+  {{ end }}
 </div>
